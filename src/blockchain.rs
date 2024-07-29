@@ -29,7 +29,7 @@ pub struct Transaction {
     pub amount: u64,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Blockchain {
     pub chain: Vec<Block>,
     pub pending_transactions: Vec<Transaction>,

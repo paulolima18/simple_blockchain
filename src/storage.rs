@@ -3,6 +3,7 @@ use std::path::Path;
 use log::{info, error};
 use crate::blockchain::Blockchain;
 use crate::network::BlockchainRef;
+use tokio::time::{sleep, Duration};
 
 pub fn save_blockchain(blockchain: &Blockchain) -> Result<(), Box<dyn std::error::Error>> {
     let serialized = serde_json::to_string(blockchain)?;
@@ -23,8 +24,8 @@ pub fn load_blockchain() -> Result<Blockchain, Box<dyn std::error::Error>> {
 
 pub async fn save_blockchain_periodically(blockchain: BlockchainRef) {
     loop {
-        tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
-        let blockchain = blockchain.lock().unwrap();
+        sleep(Duration::from_secs(10)).await;
+        let blockchain = blockchain.lock().await;
         if let Err(e) = save_blockchain(&*blockchain) {
             error!("Failed to save blockchain: {}", e);
         }
